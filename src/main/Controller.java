@@ -1,10 +1,16 @@
 package main;
 
+import static main.enums.GameStatus.CPU_WINS;
+import static main.enums.GameStatus.DRAW;
+import static main.enums.GameStatus.PLAYER_A_WINS;
+import static main.enums.GameStatus.PLAYER_B_WINS;
+
 import java.util.Scanner;
 
 import main.enums.GameStatus;
 import main.enums.Player;
 import main.exception.GameException;
+import main.exception.GameRuntimeException;
 
 public class Controller {
 
@@ -31,7 +37,7 @@ public class Controller {
 			controller.run(in, field);
 		}
 		field.renderGameBoard();
-		GameStatus.printEndGame();
+		controller.printEndGame();
 
 		in.close();
 	}
@@ -63,6 +69,23 @@ public class Controller {
 			}
 		}
 
+		System.out.println(BAR);
+	}
+	
+	public void printEndGame() {
+		System.out.println(BAR);
+		if (DRAW.equals(GameStatus.getGameStatus())) {
+			System.out.println("No more legal moves. The game has ended in a draw.");
+		} else if (CPU_WINS.equals(GameStatus.getGameStatus())) {
+			System.out.println("The game has ended. The CPU wins.");
+		} else if (PLAYER_A_WINS.equals(GameStatus.getGameStatus())) {
+			System.out.println("The game has ended. The Player A wins!!!");
+		} else if (PLAYER_B_WINS.equals(GameStatus.getGameStatus())) {
+			System.out.println("The game has ended. The Player B wins!!!");
+		} else {
+			throw new GameRuntimeException("Unexpected error: printEndGame() called and the game has not ended yet.");
+		}
+		System.out.println(BAR);
 		System.out.println(BAR);
 	}
 
