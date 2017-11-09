@@ -5,6 +5,8 @@ import static main.enums.GameStatus.DRAW;
 import static main.enums.GameStatus.PLAYER_A_WINS;
 import static main.enums.GameStatus.PLAYER_B_WINS;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import main.enums.GameStatus;
@@ -17,35 +19,36 @@ import main.exception.GameRuntimeException;
  * 
  * @author marumjr
  */
-public class Controller {
+public class TicTacToe {
 
 	private static final String BAR = "====================================================";
 
-	public static void main(String[] args) throws GameException {
-		Scanner in = new Scanner(System.in);
+	public static void main(String[] args) {
+		try {
+			File file = new File(args[0]);
+			Scanner scanFile = new Scanner(file);
+			int size = scanFile.nextInt();
+			char p1 = scanFile.next().charAt(0);
+			char p2 = scanFile.next().charAt(0);
+			char cpu = scanFile.next().charAt(0);
+			scanFile.close();
 
-		// TODO Ajeitar isso aqui para pegar os parâmetros de um arquivo
-		// System.out.println("Please, enter the name of the file with the
-		// configurations:");
-		// String filename = in.nextLine();
+			TicTacToe controller = new TicTacToe();
+			Scanner in = new Scanner(System.in);
+			
+			GameStatus.initialize();
+			GameBoard field = new GameBoard(size, p1, p2, cpu);
+			while (!GameStatus.hasGameEnded()) {
+				controller.run(in, field);
+			}
+			field.renderGameBoard();
+			controller.printEndGame();
 
-		System.out.println("What are the parameters n p1 p2 cpu?");
-		int size = in.nextInt();
-		char p1 = in.next().charAt(0);
-		char p2 = in.next().charAt(0);
-		char cpu = in.next().charAt(0);
-
-		GameBoard field = new GameBoard(size, p1, p2, cpu);
-		Controller controller = new Controller();
-
-		GameStatus.initialize();
-		while (!GameStatus.hasGameEnded()) {
-			controller.run(in, field);
+			in.close();
+			
+		} catch (FileNotFoundException e) {
+			throw new GameRuntimeException("File not found");
 		}
-		field.renderGameBoard();
-		controller.printEndGame();
-
-		in.close();
 	}
 
 	/**
@@ -55,9 +58,9 @@ public class Controller {
 	 * come to an end
 	 * 
 	 * @param in
-	 * 		Input reader to read the data submitted by the player
+	 *            Input reader to read the data submitted by the player
 	 * @param board
-	 * 		The game board
+	 *            The game board
 	 */
 	public void run(Scanner in, GameBoard board) {
 		board.renderGameBoard();
@@ -78,7 +81,7 @@ public class Controller {
 			} catch (GameException e) {
 				System.out.println(e.getMessage());
 			}
-			
+
 		} else {
 			// ... while the CPU make a scripted move
 			try {
