@@ -25,12 +25,16 @@ public class TicTacToe {
 
 	public static void main(String[] args) {
 		try {
+			// Assuming the first argument will be a file, and ignoring anything else
 			File file = new File(args[0]);
 			Scanner scanFile = new Scanner(file);
+			
+			// Reading the parameters from the file
 			int size = scanFile.nextInt();
 			char p1 = scanFile.next().charAt(0);
 			char p2 = scanFile.next().charAt(0);
 			char cpu = scanFile.next().charAt(0);
+			
 			scanFile.close();
 
 			TicTacToe controller = new TicTacToe();
@@ -47,7 +51,9 @@ public class TicTacToe {
 			in.close();
 			
 		} catch (FileNotFoundException e) {
-			throw new GameRuntimeException("File not found");
+			System.out.println("File not found.");
+		} catch (GameException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 

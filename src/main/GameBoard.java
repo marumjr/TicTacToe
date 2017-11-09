@@ -11,7 +11,6 @@ import java.util.Random;
 import main.enums.GameStatus;
 import main.enums.Player;
 import main.exception.GameException;
-import main.exception.GameRuntimeException;
 
 /**
  * Class that represents the Game Board itself, with its field and player's
@@ -32,7 +31,7 @@ public class GameBoard {
 	// Stores the number of available moves still on play
 	private int availableMoves;
 
-	public GameBoard(int size, char playerA, char playerB, char cpu) {
+	public GameBoard(int size, char playerA, char playerB, char cpu) throws GameException {
 		super();
 
 		// First, set and check the parameters configured by the user
@@ -223,18 +222,18 @@ public class GameBoard {
 	 * 
 	 * @throws GameException
 	 */
-	private void assertParameters() {
+	private void assertParameters() throws GameException {
 		if (size < 3 || size > 10) {
-			throw new GameRuntimeException("Field size is out of bounds: " + size + " This value should be between 3 and 10.");
+			throw new GameException("Field size is out of bounds: " + size + " This value should be between 3 and 10.");
 		}
 
 		// A player can't have the same mark (e.g. X or O) as another player
 		if (playersChars.get(PLAYER_A) == playersChars.get(PLAYER_B)) {
-			throw new GameRuntimeException("Duplicate use of characters for player A and B: %c", playersChars.get(PLAYER_A));
+			throw new GameException("Duplicate use of characters for player A and B: %c", playersChars.get(PLAYER_A));
 		} else if (playersChars.get(PLAYER_A) == playersChars.get(CPU)) {
-			throw new GameRuntimeException("Duplicate use of characters for player A and CPU: %c", playersChars.get(PLAYER_A));
+			throw new GameException("Duplicate use of characters for player A and CPU: %c", playersChars.get(PLAYER_A));
 		} else if (playersChars.get(PLAYER_B) == playersChars.get(CPU)) {
-			throw new GameRuntimeException("Duplicate use of characters for player B and CPU: %c", playersChars.get(PLAYER_B));
+			throw new GameException("Duplicate use of characters for player B and CPU: %c", playersChars.get(PLAYER_B));
 		}
 	}
 
